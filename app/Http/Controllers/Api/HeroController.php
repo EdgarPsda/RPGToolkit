@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Hero;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HerosValidate;
 use App\Http\Requests\HeroRequest;
 use App\Http\Resources\HerosResource;
 
 class HeroController extends Controller
 {
+    use HerosValidate;
+
     /**
      * Display a listing of the resource.
      *
@@ -18,16 +21,6 @@ class HeroController extends Controller
     public function index()
     {
         return HerosResource::collection(Hero::all());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -52,16 +45,6 @@ class HeroController extends Controller
         return new HerosResource($hero);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -85,5 +68,12 @@ class HeroController extends Controller
     public function destroy(Hero $hero)
     {
         $hero->delete();
+    }
+
+    public function validateName($attributes = [])
+    { 
+        $nameMirrored = $this->validateName($attributes);
+        dd($nameMirrored);
+        return $nameMirrored;
     }
 }
