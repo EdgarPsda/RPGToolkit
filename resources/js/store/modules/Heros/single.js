@@ -39,6 +39,24 @@ function initialState() {
             { value: 'Half-elf', label: 'Half-elf' },
             { value: 'Dragonborn', label: 'Dragonborn' }
         ],
+        lastNameEnum: [
+            {value: 'Nema', label: 'Nema'},
+            {value: 'Dhusher', label: 'Dhusher'},
+            {value: 'Burningsun', label: 'Burningsun'},
+            {value: 'Hawkglow', label: 'Hawkglow'},
+            {value: 'Nav', label: 'Nav'},
+            {value: 'Kadev', label: 'Kadev'},
+            {value: 'Lightkeeper', label: 'Lightkeeper'},
+            {value: 'Heartdancer', label: 'Heartdancer'},
+            {value: 'Fivrithrit', label: 'Fivrithrit'},
+            {value: 'Suechit', label: 'Suechit'},
+            {value: 'Tuldethatvo', label: 'Tuldethatvo'},
+            {value: 'Vrovakya', label: 'Vrovakya'},
+            {value: 'Hiao', label: 'Hiao'},
+            {value: 'Chiay', label: 'Chiay'},
+            {value: 'Hogoscu', label: 'Hogoscu'},
+            {value: 'Vedrimor', label: 'Vedrimor'}
+        ],
         loading: false,
     }
 }
@@ -48,54 +66,48 @@ const getters = {
     loading: state => state.loading,
     nameEnum: state => state.nameEnum,
     raceEnum: state => state.raceEnum,
+    lastNameEnum: state => state.lastNameEnum
 }
 
 const actions = {
 
-    setFirstName({ commit }, value) {
-        commit('setFirstName', value);
+    setFirstName({ commit, dispatch, state }, value) {
+        commit('setFirstName', value.value);
+        if(state.hero.race == 'Elf'){
+            dispatch('reversedName', value.value);
+        }
     },
+
+    setLastName({ commit }, value){
+        commit('setLastName', value.value);
+    },
+
     setRace({ commit }, value) {
-        commit('setRace', value);
+        if(value.value == 'Half-orc' || value.value == 'Dragonborn'){
+            commit('setRace', value.value);
+            commit('setLastName', '');
+            
+        }else{
+            commit('setRace', value.value);
+        }
+        
     },
 
-    getElfLastName({ commit, state }) {
-
-        return new Promise((resolve, reject) => {
-            let params = new FormData();
-
-            for (let fieldName in state.hero) {
-                let fieldValue = state.hero[fieldName];
-                if (typeof fieldValue !== "object") {
-                    params.set(fieldName, fieldValue);
-                } else {
-                    if (fieldValue && typeof fieldValue[0] !== "object") {
-                        params.set(fieldName, fieldValue);
-                    } else {
-                        for (let index in fieldValue) {
-                            params.set(
-                                fieldName + "[" + index + "]",
-                                fieldValue[index]
-                            );
-                        }
-                    }
-                }
-            }
-
-            // params.set('firstName', state.hero.firstName);
-
-            axios.get('/api/heros/validate-name/' + params  )
-                .then(response => {
-                    console.log(response.data.data);
-                })
-
-        })
+    // Assign Elf last name method
+    reversedName({ commit }, name) {
+        let tempName = name.charAt(0).toLowerCase() + name.slice(1);
+        tempName = tempName.split("").reverse().join("");
+        let elfLastName = tempName.charAt(0).toUpperCase() + tempName.slice(1);
+        commit('setLastName', elfLastName);
     }
 }
 
 const mutations = {
     setFirstName(state, value) {
         state.hero.firstName = value;
+    },
+    setLastName(state, value) { 
+        state.hero.lastName = value;
     },
     setRace(state, value) {
         state.hero.race = value;

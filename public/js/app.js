@@ -1988,6 +1988,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1998,11 +2006,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     this.fetchData();
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("HerosIndex", ["heros", "loading"]), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("HerosSingle", ["hero", "nameEnum", "raceEnum"])),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("HerosIndex", ["fetchData"]), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("HerosSingle", ["setFirstName", "setRace", "getElfLastName"]), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("HerosIndex", ["heros", "loading"]), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("HerosSingle", ["hero", "nameEnum", "raceEnum", "lastNameEnum"])),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("HerosIndex", ["fetchData"]), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("HerosSingle", ["setFirstName", "setRace", "setLastName"]), {
     updateFirstName: function updateFirstName(value) {
       this.setFirstName(value);
-      this.getElfLastName();
+    },
+    updateLastName: function updateLastName(value) {
+      this.setLastName(value);
     },
     updateRace: function updateRace(value) {
       this.setRace(value);
@@ -38033,26 +38043,46 @@ var render = function() {
                               value: _vm.hero.firstName,
                               options: _vm.nameEnum
                             },
-                            on: {
-                              input: function($event) {
-                                return _vm.updateFirstName()
-                              }
-                            }
+                            on: { input: _vm.updateFirstName }
                           })
                         ],
                         1
                       )
                     ]),
                     _vm._v(" "),
-                    _vm._m(4)
+                    _c("div", { staticClass: "col-md-4" }, [
+                      _c(
+                        "div",
+                        { staticClass: "form-group" },
+                        [
+                          _c("label", { attrs: { for: "lastName" } }, [
+                            _vm._v("Last Name")
+                          ]),
+                          _vm._v(" "),
+                          _c("v-select", {
+                            attrs: {
+                              name: "lastName",
+                              disabled:
+                                _vm.hero.race == "Elf" ||
+                                _vm.hero.race == "Half-orc" ||
+                                _vm.hero.race == "Dragonborn",
+                              value: _vm.hero.lastName,
+                              options: _vm.lastNameEnum
+                            },
+                            on: { input: _vm.updateLastName }
+                          })
+                        ],
+                        1
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
-                  _vm._m(5),
+                  _vm._m(4),
                   _vm._v(" "),
-                  _vm._m(6)
+                  _vm._m(5)
                 ]),
                 _vm._v(" "),
-                _vm._m(7)
+                _vm._m(6)
               ]
             )
           ])
@@ -38132,18 +38162,6 @@ var staticRenderFns = [
         },
         [_vm._v("×")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-4" }, [
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "lastName" } }, [_vm._v("Last Name")]),
-        _vm._v(" "),
-        _c("input", { staticClass: "form-control", attrs: { type: "text" } })
-      ])
     ])
   },
   function() {
@@ -51723,8 +51741,6 @@ var mutations = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function initialState() {
   return {
     hero: {
@@ -51810,6 +51826,55 @@ function initialState() {
       value: 'Dragonborn',
       label: 'Dragonborn'
     }],
+    lastNameEnum: [{
+      value: 'Nema',
+      label: 'Nema'
+    }, {
+      value: 'Dhusher',
+      label: 'Dhusher'
+    }, {
+      value: 'Burningsun',
+      label: 'Burningsun'
+    }, {
+      value: 'Hawkglow',
+      label: 'Hawkglow'
+    }, {
+      value: 'Nav',
+      label: 'Nav'
+    }, {
+      value: 'Kadev',
+      label: 'Kadev'
+    }, {
+      value: 'Lightkeeper',
+      label: 'Lightkeeper'
+    }, {
+      value: 'Heartdancer',
+      label: 'Heartdancer'
+    }, {
+      value: 'Fivrithrit',
+      label: 'Fivrithrit'
+    }, {
+      value: 'Suechit',
+      label: 'Suechit'
+    }, {
+      value: 'Tuldethatvo',
+      label: 'Tuldethatvo'
+    }, {
+      value: 'Vrovakya',
+      label: 'Vrovakya'
+    }, {
+      value: 'Hiao',
+      label: 'Hiao'
+    }, {
+      value: 'Chiay',
+      label: 'Chiay'
+    }, {
+      value: 'Hogoscu',
+      label: 'Hogoscu'
+    }, {
+      value: 'Vedrimor',
+      label: 'Vedrimor'
+    }],
     loading: false
   };
 }
@@ -51826,49 +51891,51 @@ var getters = {
   },
   raceEnum: function raceEnum(state) {
     return state.raceEnum;
+  },
+  lastNameEnum: function lastNameEnum(state) {
+    return state.lastNameEnum;
   }
 };
 var actions = {
   setFirstName: function setFirstName(_ref, value) {
-    var commit = _ref.commit;
-    commit('setFirstName', value);
+    var commit = _ref.commit,
+        dispatch = _ref.dispatch,
+        state = _ref.state;
+    commit('setFirstName', value.value);
+
+    if (state.hero.race == 'Elf') {
+      dispatch('reversedName', value.value);
+    }
   },
-  setRace: function setRace(_ref2, value) {
+  setLastName: function setLastName(_ref2, value) {
     var commit = _ref2.commit;
-    commit('setRace', value);
+    commit('setLastName', value.value);
   },
-  getElfLastName: function getElfLastName(_ref3) {
-    var commit = _ref3.commit,
-        state = _ref3.state;
-    return new Promise(function (resolve, reject) {
-      var params = new FormData();
+  setRace: function setRace(_ref3, value) {
+    var commit = _ref3.commit;
 
-      for (var fieldName in state.hero) {
-        var fieldValue = state.hero[fieldName];
-
-        if (_typeof(fieldValue) !== "object") {
-          params.set(fieldName, fieldValue);
-        } else {
-          if (fieldValue && _typeof(fieldValue[0]) !== "object") {
-            params.set(fieldName, fieldValue);
-          } else {
-            for (var index in fieldValue) {
-              params.set(fieldName + "[" + index + "]", fieldValue[index]);
-            }
-          }
-        }
-      }
-
-      params.set('firstName', state.hero.firstName);
-      axios.get('/api/heros/validate-name/' + params).then(function (response) {
-        console.log(response.data.data);
-      });
-    });
+    if (value.value == 'Half-orc' || value.value == 'Dragonborn') {
+      commit('setRace', value.value);
+      commit('setLastName', '');
+    } else {
+      commit('setRace', value.value);
+    }
+  },
+  // Assign Elf last name method
+  reversedName: function reversedName(_ref4, name) {
+    var commit = _ref4.commit;
+    var tempName = name.charAt(0).toLowerCase() + name.slice(1);
+    tempName = tempName.split("").reverse().join("");
+    var elfLastName = tempName.charAt(0).toUpperCase() + tempName.slice(1);
+    commit('setLastName', elfLastName);
   }
 };
 var mutations = {
   setFirstName: function setFirstName(state, value) {
     state.hero.firstName = value;
+  },
+  setLastName: function setLastName(state, value) {
+    state.hero.lastName = value;
   },
   setRace: function setRace(state, value) {
     state.hero.race = value;
@@ -51927,8 +51994,8 @@ var mutations = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/psdadev/projects/RPGToolkit/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/psdadev/projects/RPGToolkit/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/hp/visual-studio-workspace/RPGToolkit/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/hp/visual-studio-workspace/RPGToolkit/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

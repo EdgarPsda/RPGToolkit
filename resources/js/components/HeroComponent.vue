@@ -82,7 +82,7 @@
                     <label for="firstName">First Name</label>
                     <v-select
                       name="firstName"
-                      @input="updateFirstName()"
+                      @input="updateFirstName"
                       :value="hero.firstName"
                       :options="nameEnum"
                     />
@@ -92,7 +92,15 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="lastName">Last Name</label>
-                    <input type="text" class="form-control" />
+                    <v-select
+                    name="lastName"
+                    :disabled="hero.race == 'Elf' || 
+                      hero.race == 'Half-orc' || 
+                      hero.race == 'Dragonborn'" 
+                    :value="hero.lastName"
+                    @input="updateLastName"
+                    :options="lastNameEnum"
+                    />
                   </div>
                 </div>
               </div>
@@ -155,16 +163,19 @@ export default {
   },
   computed: {
     ...mapGetters("HerosIndex", ["heros", "loading"]),
-    ...mapGetters("HerosSingle", ["hero", "nameEnum", "raceEnum"])
+    ...mapGetters("HerosSingle", ["hero", "nameEnum", "raceEnum", "lastNameEnum"])
   },
 
   methods: {
     ...mapActions("HerosIndex", ["fetchData"]),
-    ...mapActions("HerosSingle", ["setFirstName", "setRace", "getElfLastName"]),
+    ...mapActions("HerosSingle", ["setFirstName", "setRace", "setLastName"]),
 
     updateFirstName(value) {
       this.setFirstName(value);
-      this.getElfLastName();
+    },
+
+    updateLastName(value){
+      this.setLastName(value);
     },
     updateRace(value) {
       this.setRace(value);

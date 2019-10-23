@@ -70,10 +70,9 @@ class HeroController extends Controller
         $hero->delete();
     }
 
-    public function validateName($attributes = [])
-    { 
-        $nameMirrored = $this->validateName($attributes);
-        dd($nameMirrored);
-        return $nameMirrored;
+    public function getDwarfNames()
+    {
+        $this->getDwarfFirstName();
     }
+
 }

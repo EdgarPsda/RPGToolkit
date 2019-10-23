@@ -18,8 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['as' => 'api.', 'namespace' => 'Api'], function () {
-    
-    Route::get('heros/validate-name/{attributes}', 'HeroController@validateName');
+    Route::get('heros/dwarf-names', 'HeroController@getDwarfNames');
     Route::resource('heros', 'HeroController');
     
 });
