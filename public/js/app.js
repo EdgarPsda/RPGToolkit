@@ -51912,18 +51912,40 @@ var actions = {
     commit('setLastName', value.value);
   },
   setRace: function setRace(_ref3, value) {
-    var commit = _ref3.commit;
+    var commit = _ref3.commit,
+        dispatch = _ref3.dispatch;
 
     if (value.value == 'Half-orc' || value.value == 'Dragonborn') {
       commit('setRace', value.value);
       commit('setLastName', '');
     } else {
-      commit('setRace', value.value);
+      if (value.value == 'Dwarf') {
+        dispatch('getDwarfFname');
+        dispatch('getDwarfLname');
+      } else {
+        commit('setRace', value.value);
+      }
     }
   },
-  // Assign Elf last name method
-  reversedName: function reversedName(_ref4, name) {
+  getDwarfFname: function getDwarfFname(_ref4) {
     var commit = _ref4.commit;
+    axios.get('/api/heros/dwarf-fnames').then(function (response) {
+      commit('setNameEnum', response.data);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  getDwarfLname: function getDwarfLname(_ref5) {
+    var commit = _ref5.commit;
+    axios.get('/api/heros/dwarf-lnames').then(function (response) {
+      commit('setLastName', response.data.data);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  // Assign Elf last name method
+  reversedName: function reversedName(_ref6, name) {
+    var commit = _ref6.commit;
     var tempName = name.charAt(0).toLowerCase() + name.slice(1);
     tempName = tempName.split("").reverse().join("");
     var elfLastName = tempName.charAt(0).toUpperCase() + tempName.slice(1);
@@ -51942,6 +51964,10 @@ var mutations = {
   },
   setLoading: function setLoading(state, value) {
     state.loading = value;
+  },
+  setNameEnum: function setNameEnum(state, value) {
+    state.nameEnum = value;
+    console.log(state.nameEnum);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51994,8 +52020,8 @@ var mutations = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/hp/visual-studio-workspace/RPGToolkit/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/hp/visual-studio-workspace/RPGToolkit/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/psdadev/projects/RPGToolkit/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/psdadev/projects/RPGToolkit/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

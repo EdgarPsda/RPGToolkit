@@ -70,9 +70,13 @@ class HeroController extends Controller
         $hero->delete();
     }
 
-    public function getDwarfNames()
+    public function getDwarFnames()
     {
-        $this->getDwarfFirstName();
+        return $this->getDwarfFirstName();
     }
 
+    public function getDwarfLnames()
+    { 
+        return $this->getDwarfLastName();
+    }
 }

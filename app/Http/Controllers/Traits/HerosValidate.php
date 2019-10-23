@@ -43,16 +43,32 @@ trait HerosValidate
     ];
 
     protected $dwarfNames = array();
+    protected $dwarflNames = array();
 
-    public function getDwarfFirstName(){
+    public function getDwarfFirstName()
+    {
 
-        foreach($this->firstNameEnum as $index => $fName ){
-            if (strpos($fName, 'r') !== false || strpos($fName, 'h') !== false){
+        foreach ($this->firstNameEnum as $fName) {
+            if (strpos($fName, 'r') !== false || strpos($fName, 'h') !== false) {
                 $this->dwarfNames[] = [
-                    'name' => $fName
+                    'value' => $fName,
+                    'label' => $fName
                 ];
             }
         }
+
         return $this->dwarfNames;
+    }
+
+    public function getDwarfLastName()
+    {
+        foreach ($this->lastNameEnum as $lName) {
+            if (strpos($lName, 'r') !== false || strpos($lName, 'h') !== false || strpos($lName, 'H') !== false) {
+                $this->dwarflNames[] = [
+                    'lname' => $lName
+                ];
+            }
+        }
+        return $this->dwarflNames;
     }
 }

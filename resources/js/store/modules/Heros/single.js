@@ -40,22 +40,22 @@ function initialState() {
             { value: 'Dragonborn', label: 'Dragonborn' }
         ],
         lastNameEnum: [
-            {value: 'Nema', label: 'Nema'},
-            {value: 'Dhusher', label: 'Dhusher'},
-            {value: 'Burningsun', label: 'Burningsun'},
-            {value: 'Hawkglow', label: 'Hawkglow'},
-            {value: 'Nav', label: 'Nav'},
-            {value: 'Kadev', label: 'Kadev'},
-            {value: 'Lightkeeper', label: 'Lightkeeper'},
-            {value: 'Heartdancer', label: 'Heartdancer'},
-            {value: 'Fivrithrit', label: 'Fivrithrit'},
-            {value: 'Suechit', label: 'Suechit'},
-            {value: 'Tuldethatvo', label: 'Tuldethatvo'},
-            {value: 'Vrovakya', label: 'Vrovakya'},
-            {value: 'Hiao', label: 'Hiao'},
-            {value: 'Chiay', label: 'Chiay'},
-            {value: 'Hogoscu', label: 'Hogoscu'},
-            {value: 'Vedrimor', label: 'Vedrimor'}
+            { value: 'Nema', label: 'Nema' },
+            { value: 'Dhusher', label: 'Dhusher' },
+            { value: 'Burningsun', label: 'Burningsun' },
+            { value: 'Hawkglow', label: 'Hawkglow' },
+            { value: 'Nav', label: 'Nav' },
+            { value: 'Kadev', label: 'Kadev' },
+            { value: 'Lightkeeper', label: 'Lightkeeper' },
+            { value: 'Heartdancer', label: 'Heartdancer' },
+            { value: 'Fivrithrit', label: 'Fivrithrit' },
+            { value: 'Suechit', label: 'Suechit' },
+            { value: 'Tuldethatvo', label: 'Tuldethatvo' },
+            { value: 'Vrovakya', label: 'Vrovakya' },
+            { value: 'Hiao', label: 'Hiao' },
+            { value: 'Chiay', label: 'Chiay' },
+            { value: 'Hogoscu', label: 'Hogoscu' },
+            { value: 'Vedrimor', label: 'Vedrimor' }
         ],
         loading: false,
     }
@@ -73,24 +73,48 @@ const actions = {
 
     setFirstName({ commit, dispatch, state }, value) {
         commit('setFirstName', value.value);
-        if(state.hero.race == 'Elf'){
+        if (state.hero.race == 'Elf') {
             dispatch('reversedName', value.value);
         }
     },
 
-    setLastName({ commit }, value){
+    setLastName({ commit }, value) {
         commit('setLastName', value.value);
     },
 
-    setRace({ commit }, value) {
-        if(value.value == 'Half-orc' || value.value == 'Dragonborn'){
+    setRace({ commit, dispatch }, value) {
+        if (value.value == 'Half-orc' || value.value == 'Dragonborn') {
             commit('setRace', value.value);
             commit('setLastName', '');
-            
-        }else{
-            commit('setRace', value.value);
+
+        } else {
+            if (value.value == 'Dwarf') {
+                dispatch('getDwarfFname');
+                dispatch('getDwarfLname');
+            } else {
+                commit('setRace', value.value);
+            }
         }
-        
+    },
+
+    getDwarfFname({ commit }) {
+        axios.get('/api/heros/dwarf-fnames')
+            .then(response => {
+                commit('setNameEnum', response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    },
+
+    getDwarfLname({ commit }) {
+        axios.get('/api/heros/dwarf-lnames')
+            .then(response => {
+                commit('setLastName', response.data.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
     },
 
     // Assign Elf last name method
@@ -106,7 +130,7 @@ const mutations = {
     setFirstName(state, value) {
         state.hero.firstName = value;
     },
-    setLastName(state, value) { 
+    setLastName(state, value) {
         state.hero.lastName = value;
     },
     setRace(state, value) {
@@ -114,6 +138,10 @@ const mutations = {
     },
     setLoading(state, value) {
         state.loading = value;
+    },
+    setNameEnum(state, value) { 
+        state.nameEnum = value;
+        console.log(state.nameEnum);
     }
 }
 
