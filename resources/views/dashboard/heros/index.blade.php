@@ -16,4 +16,6 @@ Hero's Module
     </div>
 </div>
 
+<hero-component></hero-component>
+
 @endsection
