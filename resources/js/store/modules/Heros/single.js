@@ -8,10 +8,6 @@ function initialState() {
             weapon: null,
             stats: null
         },
-        attributes: {
-            firstName: '',
-            race: ''
-        },
         nameEnum: [
             { value: 'Bheizer', label: 'Bheizer' },
             { value: 'Khazun', label: 'Khazun' },
@@ -57,6 +53,22 @@ function initialState() {
             { value: 'Hogoscu', label: 'Hogoscu' },
             { value: 'Vedrimor', label: 'Vedrimor' }
         ],
+        classEnum: [
+            { value: 'Paladin', label: 'Paladin' },
+            { value: 'Ranger', label: 'Ranger' },
+            { value: 'Barbarian', label: 'Barbarian' },
+            { value: 'Wizard', label: 'Wizard' },
+            { value: 'Cleric', label: 'Cleric' },
+            { value: 'Warrior', label: 'Warrior' },
+            { value: 'Thief', label: 'Thief' },
+        ],
+        weaponEnum: [
+            { value: 'Sword', label: 'Sword' },
+            { value: 'Dagger', label: 'Dagger' },
+            { value: 'Hammer', label: 'Hammer' },
+            { value: 'Bow and Arrows', label: 'Bow and Arrows' },
+            { value: 'Staff', label: 'Staff' },
+        ],
         loading: false,
     }
 }
@@ -66,7 +78,9 @@ const getters = {
     loading: state => state.loading,
     nameEnum: state => state.nameEnum,
     raceEnum: state => state.raceEnum,
-    lastNameEnum: state => state.lastNameEnum
+    lastNameEnum: state => state.lastNameEnum,
+    classEnum: state => state.classEnum,
+    weaponEnum: state => state.weaponEnum,
 }
 
 const actions = {
@@ -83,6 +97,9 @@ const actions = {
     },
 
     setRace({ commit, dispatch }, value) {
+        commit('resetState');
+
+        // Names validations
         if (value.value == 'Half-orc' || value.value == 'Dragonborn') {
             commit('setRace', value.value);
             commit('setLastName', '');
@@ -91,12 +108,69 @@ const actions = {
             if (value.value == 'Dwarf') {
                 dispatch('getDwarfFname');
                 dispatch('getDwarfLname');
+                dispatch('getClasses', value.value);
+                commit('setRace', value.value);
             } else {
                 commit('setRace', value.value);
             }
         }
+
+        // Class validations
+        if (value.value == 'Human' || value.value == 'Half-elf') {
+            commit('setClass', 'Paladin');
+            commit('setWeapon', 'Sword');
+        } else {
+            if (value.value == 'Halfling' || value.value == 'Elf') {
+                dispatch('getClasses', value.value);
+            } else {
+                if (value.value == 'Half-orc') {
+                    dispatch('getClasses', value.value);
+                } else {
+                    if (value.value == 'Dragonborn') {
+                        dispatch('getClasses', value.value);
+                    } else {
+                        commit('setRace', value.value);
+                    }
+                }
+            }
+        }
     },
 
+    setClass({ commit, dispatch }, value) {
+        // Weapon validation
+        if (value.value == 'Ranger') {
+            commit('setClass', value.value);
+            commit('setWeapon', 'Bow and Arrows');
+        } else {
+            if (value.value == 'Barbarian') {
+                commit('setClass', value.value);
+                dispatch('getWeapons', value.value);
+            } else {
+                if (value.value == 'Wizard' || value.value == 'Cleric') {
+                    commit('setClass', value.value);
+                    commit('setWeapon', 'Staff');
+                } else {
+                    if (value.value == 'Thief') {
+                        commit('setClass', value.value);
+                        dispatch('getWeapons', value.value);
+                    } else {
+                        if (value.value == 'Paladin') {
+                            commit('setClass', value.value);
+                            commit('setWeapon', 'Sword');
+                        } else { 
+                            commit('setClass', value.value);
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    setWeapon({ commit }, value) {
+        commit('setWeapon', value);
+    },
+
+    // Assign first name enum to Dwarf race
     getDwarfFname({ commit }) {
         axios.get('/api/heros/dwarf-fnames')
             .then(response => {
@@ -107,10 +181,11 @@ const actions = {
             })
     },
 
+    // Assign last name enum to Dwarf race
     getDwarfLname({ commit }) {
         axios.get('/api/heros/dwarf-lnames')
             .then(response => {
-                commit('setLastName', response.data.data);
+                commit('setLastNameEnum', response.data);
             })
             .catch(error => {
                 console.log(error);
@@ -123,7 +198,30 @@ const actions = {
         tempName = tempName.split("").reverse().join("");
         let elfLastName = tempName.charAt(0).toUpperCase() + tempName.slice(1);
         commit('setLastName', elfLastName);
-    }
+    },
+
+    // Assign validated class enum
+    getClasses({ commit }, race) {
+        axios.get('/api/heros/classes/' + race)
+            .then(response => {
+                commit('setClassEnum', response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    },
+
+    // Assign validated wepon enum
+    getWeapons({ commit }, clas) {
+        axios.get('/api/heros/weapons/' + clas)
+            .then(response => {
+                console.log(response.data);
+                commit('setWeaponEnum', response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    },
 }
 
 const mutations = {
@@ -139,9 +237,27 @@ const mutations = {
     setLoading(state, value) {
         state.loading = value;
     },
-    setNameEnum(state, value) { 
+    setNameEnum(state, value) {
         state.nameEnum = value;
-        console.log(state.nameEnum);
+    },
+    setLastNameEnum(state, value) {
+        state.lastNameEnum = value;
+    },
+    setClass(state, value) {
+        state.hero.class = value;
+    },
+    setClassEnum(state, value) {
+        state.classEnum = value;
+    },
+    setWeapon(state, value) {
+        state.hero.weapon = value;
+        console.log(state.hero.weapon);
+    },
+    setWeaponEnum(state, value) {
+        state.weaponEnum = value;
+    },
+    resetState(state) {
+        state = Object.assign(state, initialState())
     }
 }
 

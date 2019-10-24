@@ -1996,6 +1996,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2006,8 +2020,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     this.fetchData();
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("HerosIndex", ["heros", "loading"]), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("HerosSingle", ["hero", "nameEnum", "raceEnum", "lastNameEnum"])),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("HerosIndex", ["fetchData"]), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("HerosSingle", ["setFirstName", "setRace", "setLastName"]), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("HerosIndex", ["heros", "loading"]), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("HerosSingle", ["hero", "nameEnum", "raceEnum", "lastNameEnum", "classEnum", "weaponEnum"])),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("HerosIndex", ["fetchData"]), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])("HerosSingle", ["setFirstName", "setRace", "setLastName", "setClass", "setWeapon"]), {
     updateFirstName: function updateFirstName(value) {
       this.setFirstName(value);
     },
@@ -2016,6 +2030,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     updateRace: function updateRace(value) {
       this.setRace(value);
+    },
+    updateClass: function updateClass(value) {
+      this.setClass(value);
+    },
+    updateWeapon: function updateWeapon(value) {
+      this.setWeapon(value);
     }
   })
 });
@@ -38077,12 +38097,62 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _vm._m(4),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _c(
+                        "div",
+                        { staticClass: "form-group" },
+                        [
+                          _c("label", { attrs: { for: "class" } }, [
+                            _vm._v("Class")
+                          ]),
+                          _vm._v(" "),
+                          _c("v-select", {
+                            attrs: {
+                              disabled:
+                                _vm.hero.race == "Human" ||
+                                _vm.hero.race == "Half-elf",
+                              value: _vm.hero.class,
+                              options: _vm.classEnum
+                            },
+                            on: { input: _vm.updateClass }
+                          })
+                        ],
+                        1
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _c(
+                        "div",
+                        { staticClass: "form-group" },
+                        [
+                          _c("label", { attrs: { for: "weapon" } }, [
+                            _vm._v("Weapon")
+                          ]),
+                          _vm._v(" "),
+                          _c("v-select", {
+                            attrs: {
+                              disabled:
+                                _vm.hero.class == "Paladin" ||
+                                _vm.hero.class == "Ranger" ||
+                                _vm.hero.class == "Wizard" ||
+                                _vm.hero.class == "Cleric",
+                              value: _vm.hero.weapon,
+                              options: _vm.weaponEnum
+                            },
+                            on: { input: _vm.updateWeapon }
+                          })
+                        ],
+                        1
+                      )
+                    ])
+                  ]),
                   _vm._v(" "),
-                  _vm._m(5)
+                  _vm._m(4)
                 ]),
                 _vm._v(" "),
-                _vm._m(6)
+                _vm._m(5)
               ]
             )
           ])
@@ -38162,28 +38232,6 @@ var staticRenderFns = [
         },
         [_vm._v("×")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-6" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "class" } }, [_vm._v("Class")]),
-          _vm._v(" "),
-          _c("input", { staticClass: "form-control", attrs: { type: "text" } })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-6" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "weapon" } }, [_vm._v("Weapon")]),
-          _vm._v(" "),
-          _c("input", { staticClass: "form-control", attrs: { type: "text" } })
-        ])
-      ])
     ])
   },
   function() {
@@ -51751,10 +51799,6 @@ function initialState() {
       weapon: null,
       stats: null
     },
-    attributes: {
-      firstName: '',
-      race: ''
-    },
     nameEnum: [{
       value: 'Bheizer',
       label: 'Bheizer'
@@ -51875,6 +51919,44 @@ function initialState() {
       value: 'Vedrimor',
       label: 'Vedrimor'
     }],
+    classEnum: [{
+      value: 'Paladin',
+      label: 'Paladin'
+    }, {
+      value: 'Ranger',
+      label: 'Ranger'
+    }, {
+      value: 'Barbarian',
+      label: 'Barbarian'
+    }, {
+      value: 'Wizard',
+      label: 'Wizard'
+    }, {
+      value: 'Cleric',
+      label: 'Cleric'
+    }, {
+      value: 'Warrior',
+      label: 'Warrior'
+    }, {
+      value: 'Thief',
+      label: 'Thief'
+    }],
+    weaponEnum: [{
+      value: 'Sword',
+      label: 'Sword'
+    }, {
+      value: 'Dagger',
+      label: 'Dagger'
+    }, {
+      value: 'Hammer',
+      label: 'Hammer'
+    }, {
+      value: 'Bow and Arrows',
+      label: 'Bow and Arrows'
+    }, {
+      value: 'Staff',
+      label: 'Staff'
+    }],
     loading: false
   };
 }
@@ -51894,6 +51976,12 @@ var getters = {
   },
   lastNameEnum: function lastNameEnum(state) {
     return state.lastNameEnum;
+  },
+  classEnum: function classEnum(state) {
+    return state.classEnum;
+  },
+  weaponEnum: function weaponEnum(state) {
+    return state.weaponEnum;
   }
 };
 var actions = {
@@ -51914,6 +52002,7 @@ var actions = {
   setRace: function setRace(_ref3, value) {
     var commit = _ref3.commit,
         dispatch = _ref3.dispatch;
+    commit('resetState'); // Names validations
 
     if (value.value == 'Half-orc' || value.value == 'Dragonborn') {
       commit('setRace', value.value);
@@ -51922,34 +52011,113 @@ var actions = {
       if (value.value == 'Dwarf') {
         dispatch('getDwarfFname');
         dispatch('getDwarfLname');
+        dispatch('getClasses', value.value);
+        commit('setRace', value.value);
       } else {
         commit('setRace', value.value);
       }
+    } // Class validations
+
+
+    if (value.value == 'Human' || value.value == 'Half-elf') {
+      commit('setClass', 'Paladin');
+      commit('setWeapon', 'Sword');
+    } else {
+      if (value.value == 'Halfling' || value.value == 'Elf') {
+        dispatch('getClasses', value.value);
+      } else {
+        if (value.value == 'Half-orc') {
+          dispatch('getClasses', value.value);
+        } else {
+          if (value.value == 'Dragonborn') {
+            dispatch('getClasses', value.value);
+          } else {
+            commit('setRace', value.value);
+          }
+        }
+      }
     }
   },
-  getDwarfFname: function getDwarfFname(_ref4) {
-    var commit = _ref4.commit;
+  setClass: function setClass(_ref4, value) {
+    var commit = _ref4.commit,
+        dispatch = _ref4.dispatch;
+
+    // Weapon validation
+    if (value.value == 'Ranger') {
+      commit('setClass', value.value);
+      commit('setWeapon', 'Bow and Arrows');
+    } else {
+      if (value.value == 'Barbarian') {
+        commit('setClass', value.value);
+        dispatch('getWeapons', value.value);
+      } else {
+        if (value.value == 'Wizard' || value.value == 'Cleric') {
+          commit('setClass', value.value);
+          commit('setWeapon', 'Staff');
+        } else {
+          if (value.value == 'Thief') {
+            commit('setClass', value.value);
+            dispatch('getWeapons', value.value);
+          } else {
+            if (value.value == 'Paladin') {
+              commit('setClass', value.value);
+              commit('setWeapon', 'Sword');
+            } else {
+              commit('setClass', value.value);
+            }
+          }
+        }
+      }
+    }
+  },
+  setWeapon: function setWeapon(_ref5, value) {
+    var commit = _ref5.commit;
+    commit('setWeapon', value);
+  },
+  // Assign first name enum to Dwarf race
+  getDwarfFname: function getDwarfFname(_ref6) {
+    var commit = _ref6.commit;
     axios.get('/api/heros/dwarf-fnames').then(function (response) {
       commit('setNameEnum', response.data);
     })["catch"](function (error) {
       console.log(error);
     });
   },
-  getDwarfLname: function getDwarfLname(_ref5) {
-    var commit = _ref5.commit;
+  // Assign last name enum to Dwarf race
+  getDwarfLname: function getDwarfLname(_ref7) {
+    var commit = _ref7.commit;
     axios.get('/api/heros/dwarf-lnames').then(function (response) {
-      commit('setLastName', response.data.data);
+      commit('setLastNameEnum', response.data);
     })["catch"](function (error) {
       console.log(error);
     });
   },
   // Assign Elf last name method
-  reversedName: function reversedName(_ref6, name) {
-    var commit = _ref6.commit;
+  reversedName: function reversedName(_ref8, name) {
+    var commit = _ref8.commit;
     var tempName = name.charAt(0).toLowerCase() + name.slice(1);
     tempName = tempName.split("").reverse().join("");
     var elfLastName = tempName.charAt(0).toUpperCase() + tempName.slice(1);
     commit('setLastName', elfLastName);
+  },
+  // Assign validated class enum
+  getClasses: function getClasses(_ref9, race) {
+    var commit = _ref9.commit;
+    axios.get('/api/heros/classes/' + race).then(function (response) {
+      commit('setClassEnum', response.data);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  // Assign validated wepon enum
+  getWeapons: function getWeapons(_ref10, clas) {
+    var commit = _ref10.commit;
+    axios.get('/api/heros/weapons/' + clas).then(function (response) {
+      console.log(response.data);
+      commit('setWeaponEnum', response.data);
+    })["catch"](function (error) {
+      console.log(error);
+    });
   }
 };
 var mutations = {
@@ -51967,7 +52135,25 @@ var mutations = {
   },
   setNameEnum: function setNameEnum(state, value) {
     state.nameEnum = value;
-    console.log(state.nameEnum);
+  },
+  setLastNameEnum: function setLastNameEnum(state, value) {
+    state.lastNameEnum = value;
+  },
+  setClass: function setClass(state, value) {
+    state.hero["class"] = value;
+  },
+  setClassEnum: function setClassEnum(state, value) {
+    state.classEnum = value;
+  },
+  setWeapon: function setWeapon(state, value) {
+    state.hero.weapon = value;
+    console.log(state.hero.weapon);
+  },
+  setWeaponEnum: function setWeaponEnum(state, value) {
+    state.weaponEnum = value;
+  },
+  resetState: function resetState(state) {
+    state = Object.assign(state, initialState());
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -52020,8 +52206,8 @@ var mutations = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/psdadev/projects/RPGToolkit/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/psdadev/projects/RPGToolkit/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/hp/visual-studio-workspace/RPGToolkit/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/hp/visual-studio-workspace/RPGToolkit/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -19,7 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['as' => 'api.', 'namespace' => 'Api'], function () {
     Route::get('heros/dwarf-fnames', 'HeroController@getDwarFnames');
-    Route::get('heros/dwarf-lnames', 'HeroController@getDwarLnames');
+    Route::get('heros/dwarf-lnames', 'HeroController@getDwarfLnames');
+    Route::get('heros/classes/{race}', 'HeroController@getClasses');
+    Route::get('heros/weapons/{clas}', 'HeroController@getWeapons');
     Route::resource('heros', 'HeroController');
     
 });

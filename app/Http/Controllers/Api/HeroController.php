@@ -76,7 +76,17 @@ class HeroController extends Controller
     }
 
     public function getDwarfLnames()
-    { 
+    {
         return $this->getDwarfLastName();
+    }
+
+    public function getClass($race)
+    {
+        return $this->getClasses($race);
+    }
+
+    public function getWeapons($clas)
+    {
+        return $this->getWeaponsEnum($clas);
     }
 }
