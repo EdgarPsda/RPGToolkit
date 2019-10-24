@@ -82,7 +82,7 @@
                     <label for="firstName">First Name</label>
                     <v-select
                       name="firstName"
-                      @input="updateFirstName()"
+                      @input="updateFirstName"
                       :value="hero.firstName"
                       :options="nameEnum"
                     />
@@ -92,7 +92,15 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="lastName">Last Name</label>
-                    <input type="text" class="form-control" />
+                    <v-select
+                    name="lastName"
+                    :disabled="hero.race == 'Elf' || 
+                      hero.race == 'Half-orc' || 
+                      hero.race == 'Dragonborn'" 
+                    :value="hero.lastName"
+                    @input="updateLastName"
+                    :options="lastNameEnum"
+                    />
                   </div>
                 </div>
               </div>
@@ -101,14 +109,28 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="class">Class</label>
-                    <input type="text" class="form-control" />
+                    <v-select
+                    :disabled="hero.race == 'Human' || 
+                      hero.race == 'Half-elf'"
+                    :value="hero.class"
+                    @input="updateClass"
+                    :options="classEnum"
+                    />
                   </div>
                 </div>
 
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="weapon">Weapon</label>
-                    <input type="text" class="form-control" />
+                    <v-select
+                    :disabled="hero.class == 'Paladin' || 
+                      hero.class == 'Ranger' || 
+                      hero.class == 'Wizard' || 
+                      hero.class == 'Cleric'"
+                    :value="hero.weapon"
+                    @input="updateWeapon"
+                    :options="weaponEnum"
+                    />
                   </div>
                 </div>
               </div>
@@ -155,19 +177,28 @@ export default {
   },
   computed: {
     ...mapGetters("HerosIndex", ["heros", "loading"]),
-    ...mapGetters("HerosSingle", ["hero", "nameEnum", "raceEnum"])
+    ...mapGetters("HerosSingle", ["hero", "nameEnum", "raceEnum", "lastNameEnum", "classEnum", "weaponEnum"])
   },
 
   methods: {
     ...mapActions("HerosIndex", ["fetchData"]),
-    ...mapActions("HerosSingle", ["setFirstName", "setRace", "getElfLastName"]),
+    ...mapActions("HerosSingle", ["setFirstName", "setRace", "setLastName", "setClass", "setWeapon"]),
 
     updateFirstName(value) {
       this.setFirstName(value);
-      this.getElfLastName();
+    },
+
+    updateLastName(value){
+      this.setLastName(value);
     },
     updateRace(value) {
       this.setRace(value);
+    },
+    updateClass(value){
+      this.setClass(value);
+    },
+    updateWeapon(value){
+      this.setWeapon(value);
     }
   }
 };
